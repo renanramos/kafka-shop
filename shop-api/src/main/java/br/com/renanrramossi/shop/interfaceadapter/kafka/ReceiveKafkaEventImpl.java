@@ -1,0 +1,35 @@
+package br.com.renanrramossi.shop.interfaceadapter.kafka;
+
+import br.com.renanrramossi.shop.businessrule.kafka.ReceiveKafkaEvent;
+import br.com.renanrramossi.shop.domain.dto.ShopDTO;
+import br.com.renanrramossi.shop.domain.entities.Shop;
+import br.com.renanrramossi.shop.interfaceadapter.repository.ShopRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Service;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent<ShopDTO> {
+
+	private final ShopRepository shopRepository;
+
+	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
+
+	@Override
+	@KafkaListener(topics = SHOP_TOPIC_EVENT_NAME, groupId = "group")
+	public void listenToEvents(final ShopDTO shopDTO) {
+		try{
+			log.info("Status da compra recebida no tópico: {}.", shopDTO.getIdentifier());
+
+			final Shop shop = shopRepository.findByIdentifier(shopDTO.getIdentifier());
+			shop.setStatus(shopDTO.getStatus());
+			shopRepository.save(shop);
+		}catch (Exception ex) {
+			log.error("Error no processamento da compra {}", shopDTO.getIdentifier());
+			log.error(ex.getLocalizedMessage());
+		}
+	}
+}
