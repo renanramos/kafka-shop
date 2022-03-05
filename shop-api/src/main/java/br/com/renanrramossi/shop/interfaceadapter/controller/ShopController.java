@@ -1,10 +1,10 @@
 package br.com.renanrramossi.shop.interfaceadapter.controller;
 
+import br.com.renanrramossi.shop.domain.entities.StatusEnum;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ShopRepository;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.entities.Shop;
 import br.com.renanrramossi.shop.domain.entities.ShopItem;
-import br.com.renanrramossi.shop.domain.entities.StatusEnum;
 import br.com.renanrramossi.shop.external.config.kafka.service.KafkaClient;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopDTOMapper;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopMapper;
