@@ -1,11 +1,11 @@
 package br.com.renanrramossi.shop.interfaceadapter.controller;
 
+import br.com.renanrramossi.shop.common.kafka.service.KafkaClient;
 import br.com.renanrramossi.shop.domain.entities.StatusEnum;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ShopRepository;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.entities.Shop;
 import br.com.renanrramossi.shop.domain.entities.ShopItem;
-import br.com.renanrramossi.shop.external.config.kafka.service.KafkaClient;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopDTOMapper;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopMapper;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +23,7 @@ public class ShopController {
 
 	private final ShopRepository shopRepository;
 	private final KafkaClient kafkaClient;
+	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
 
 	@GetMapping
 	public List<ShopDTO> getShop() {
@@ -48,7 +49,7 @@ public class ShopController {
 
 		final Shop newShop = shopRepository.save(shop);
 
-		kafkaClient.sendMessage(shopDTO);
+		kafkaClient.sendMessage(SHOP_TOPIC_NAME, shopDTO);
 
 		return ShopDTOMapper.INSTANCE.mapShopDTOFrom(newShop);
 	}
