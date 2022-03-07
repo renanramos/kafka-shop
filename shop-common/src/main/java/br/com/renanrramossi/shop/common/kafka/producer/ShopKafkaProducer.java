@@ -21,10 +21,6 @@ public class ShopKafkaProducer<T> {
 
 	private String clientId = "shop-api";
 
-//	public ShopKafkaProducer(final String clientId) {
-//		this.clientId = clientId;
-//	}
-
 	public ProducerFactory<String, T> producerFactory() {
 		final Map<String, Object> props = new HashMap<>();
 		props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);

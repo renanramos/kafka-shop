@@ -16,15 +16,17 @@ import java.util.Map;
 @Configuration
 public class ShopKafkaConsumer<T> {
 
+	public static final String BASE_PACKAGE = "br.com.renanrramossi.shop";
+
 	@Value("${kafka.bootstrapAddress:localhost:9092}")
 	private String bootstrapAddress;
 
 	private ConsumerFactory<String, T> consumerFactory() {
 		final JsonDeserializer<T> deserializer = new JsonDeserializer<>();
+		deserializer.addTrustedPackages("*");
 
 		final Map<String, Object> props = new HashMap<>();
 		props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, bootstrapAddress);
-		props.put(JsonDeserializer.TRUSTED_PACKAGES, "br.com.renanrramossi.shop");
 
 		return new DefaultKafkaConsumerFactory<>(props, new StringDeserializer(), deserializer);
 	}
