@@ -28,6 +28,12 @@
 			<classifier>model</classifier>
         </dependency>
 
+		<dependency>
+			<groupId>br.com.renanrramossi</groupId>
+			<artifactId>shop-common</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+			<classifier>common</classifier>
+		</dependency>
     </dependencies>
 
     <build>
