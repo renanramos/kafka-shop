@@ -26,7 +26,8 @@
 		<module>shop-validator</module>
 		<module>shop-report</module>
 		<module>shop-model</module>
-	</modules>
+        <module>shop-common</module>
+    </modules>
 
 	<dependencies>
 		<!-- Spring Boot -->
