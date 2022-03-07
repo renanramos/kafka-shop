@@ -1,10 +1,10 @@
 package br.com.renanrramossi.shop.interfaceadapter.kafka;
 
+import br.com.renanrramossi.shop.common.kafka.service.KafkaClient;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.dto.ShopItemDTO;
 import br.com.renanrramossi.shop.domain.entities.Product;
 import br.com.renanrramossi.shop.domain.entities.StatusEnum;
-import br.com.renanrramossi.shop.external.config.kafka.service.KafkaClient;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +19,7 @@ import java.util.List;
 public class ReceiveKafkaMessage {
 
 	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
+	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
 
 	private final ProductRepository productRepository;
 	private final KafkaClient kafkaClient;
@@ -30,7 +31,7 @@ public class ReceiveKafkaMessage {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());
 
 			shopDTO.setStatus(validateShopItems(shopDTO.getItems(), shopDTO.getIdentifier()));
-			kafkaClient.sendMessage(shopDTO);
+			kafkaClient.sendMessage(SHOP_TOPIC_EVENT_NAME, shopDTO);
 
 		} catch (Exception ex) {
 			log.error("Exception: " + ex.getLocalizedMessage());
