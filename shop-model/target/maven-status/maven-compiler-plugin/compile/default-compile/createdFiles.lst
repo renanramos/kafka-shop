@@ -1,0 +1,6 @@
+br/com/renanrramossi/shop/domain/entities/StatusEnum.class
+br/com/renanrramossi/shop/Application.class
+br/com/renanrramossi/shop/domain/dto/ShopDTO.class
+br/com/renanrramossi/shop/domain/dto/ShopItemDTO.class
+br/com/renanrramossi/shop/domain/dto/ShopDTO$ShopDTOBuilder.class
+br/com/renanrramossi/shop/domain/dto/ShopItemDTO$ShopItemDTOBuilder.class

@@ -25,6 +25,7 @@
             <groupId>br.com.renanrramossi</groupId>
             <artifactId>shop-model</artifactId>
             <version>0.0.1-SNAPSHOT</version>
+			<classifier>model</classifier>
         </dependency>
 
     </dependencies>

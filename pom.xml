@@ -24,6 +24,7 @@
 	<modules>
 		<module>shop-api</module>
 		<module>shop-validator</module>
+		<module>shop-report</module>
 		<module>shop-model</module>
 	</modules>
 
