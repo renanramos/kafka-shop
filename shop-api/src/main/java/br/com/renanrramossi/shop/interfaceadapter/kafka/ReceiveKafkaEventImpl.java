@@ -1,6 +1,6 @@
 package br.com.renanrramossi.shop.interfaceadapter.kafka;
 
-import br.com.renanrramossi.shop.businessrule.kafka.ReceiveKafkaEvent;
+import br.com.renanrramossi.shop.common.kafka.service.ReceiveKafkaEvent;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.entities.Shop;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ShopRepository;
@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent<ShopDTO> {
+public class ReceiveKafkaEventImpl extends ReceiveKafkaEvent<ShopDTO> {
 
 	private final ShopRepository shopRepository;
 

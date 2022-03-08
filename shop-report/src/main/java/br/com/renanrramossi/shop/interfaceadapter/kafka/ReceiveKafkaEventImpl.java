@@ -1,6 +1,6 @@
 package br.com.renanrramossi.shop.interfaceadapter.kafka;
 
-import br.com.renanrramossi.shop.businessrule.kafka.ReceiveKafkaEvent;
+import br.com.renanrramossi.shop.common.kafka.service.ReceiveKafkaEvent;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ReportRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +13,7 @@ import javax.transaction.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent {
+public class ReceiveKafkaEventImpl extends ReceiveKafkaEvent<ShopDTO> {
 
 	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
 	private final ReportRepository reportRepository;
@@ -21,7 +21,7 @@ public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent {
 	@Override
 	@Transactional
 	@KafkaListener(topics = SHOP_TOPIC_EVENT_NAME, groupId = "group_report")
-	public void listenToShopTopic(final ShopDTO shopDTO) {
+	public void listenToEvents(final ShopDTO shopDTO) {
 
 		try {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());

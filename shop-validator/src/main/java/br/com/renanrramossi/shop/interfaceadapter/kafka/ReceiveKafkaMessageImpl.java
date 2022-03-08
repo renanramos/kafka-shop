@@ -1,7 +1,7 @@
 package br.com.renanrramossi.shop.interfaceadapter.kafka;
 
-import br.com.renanrramossi.shop.businessrule.kafka.ReceiveKafkaMessage;
 import br.com.renanrramossi.shop.common.kafka.service.KafkaClient;
+import br.com.renanrramossi.shop.common.kafka.service.ReceiveKafkaEvent;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.dto.ShopItemDTO;
 import br.com.renanrramossi.shop.domain.entities.Product;
@@ -17,7 +17,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ReceiveKafkaMessageImpl implements ReceiveKafkaMessage<ShopDTO> {
+public class ReceiveKafkaMessageImpl extends ReceiveKafkaEvent<ShopDTO> {
 
 	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
 	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
@@ -26,7 +26,7 @@ public class ReceiveKafkaMessageImpl implements ReceiveKafkaMessage<ShopDTO> {
 	private final KafkaClient kafkaClient;
 
 	@KafkaListener(topics =  SHOP_TOPIC_NAME, groupId = "group")
-	public void listenShopTopic(final ShopDTO shopDTO) {
+	public void listenToEvents(final ShopDTO shopDTO) {
 
 		try {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());
