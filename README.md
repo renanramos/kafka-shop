@@ -144,3 +144,8 @@ GET: /shop_report
 
 Módulo contento as classes modelos utilizadas entre outros módulos. Uma forma de centralizar o código evitando a repetição
 de código nos diferentes módulos.
+
+
+### Shop-Common
+
+Módulo criado com o objetivo de conte todos os serviços utilizados do Kafka pelos outros módulos.
