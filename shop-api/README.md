@@ -1,22 +1,75 @@
-# Read Me First
-The following was discovered as part of building this project:
+## Shop-API
 
-* The original package name 'br.com.renanrramossi.shop-api' is invalid and this project uses 'br.com.renanrramossi.shopapi' instead.
+API composta de dois endpoints para realizar a compra de produtos `POST` e também para realizar a consulta de compras efetuadas `GET`
+e o status da compra, se foi válida ou inválida.
 
-# Getting Started
+* O arquivo `schema.sql` é responsável por criar as tabelas no banco de dados `H2`:
 
-### Reference Documentation
-For further reference, please consider the following sections:
+```
+create table shop (
+    id bigserial primary key auto_increment,
+    identifier varchar not null,
+    status varchar not null,
+    date_shop date
+);
 
-* [Official Apache Maven documentation](https://maven.apache.org/guides/index.html)
-* [Spring Boot Maven Plugin Reference Guide](https://docs.spring.io/spring-boot/docs/2.6.4/maven-plugin/reference/html/)
-* [Create an OCI image](https://docs.spring.io/spring-boot/docs/2.6.4/maven-plugin/reference/html/#build-image)
-* [Spring Web](https://docs.spring.io/spring-boot/docs/2.6.4/reference/htmlsingle/#boot-features-developing-web-applications)
+create table shop_item (
+    id bigserial primary key auto_increment,
+    product_identifier varchar(100) not null,
+    amount int not null,
+    price float not null,
+    shop_id bigint REFERENCES shop(id)
+);
+```
 
-### Guides
-The following guides illustrate how to use some features concretely:
 
-* [Building a RESTful Web Service](https://spring.io/guides/gs/rest-service/)
-* [Serving Web Content with Spring MVC](https://spring.io/guides/gs/serving-web-content/)
-* [Building REST services with Spring](https://spring.io/guides/tutorials/bookmarks/)
+* Efetuar o <code>POST</code> de uma nova compra:
 
+```
+POST: /shop
+
+{
+    "items": [
+        {
+            "productIdentifier": "123456789",
+            "amount": "1",
+            "price": "99999"
+        }
+    ]
+}
+
+RESPONSE:
+{
+    "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
+    "dateShop": "2022-03-07",
+    "status": "PENDING",
+    "items": [
+        {
+            "productIdentifier": "123456789",
+            "amount": 1,
+            "price": 99999.0
+        }
+    ]
+}
+```
+
+* Consultar o status da compra realizada:
+
+```
+GET: /shop
+
+[
+    {
+        "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
+        "dateShop": "2022-03-07",
+        "status": "SUCCESS",
+        "items": [
+            {
+                "productIdentifier": "123456789",
+                "amount": 1,
+                "price": 99999.0
+            }
+        ]
+    }
+]
+```
