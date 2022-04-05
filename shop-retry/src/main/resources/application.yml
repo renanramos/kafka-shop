@@ -1,5 +1,5 @@
 server:
-  port: ${SERVER_PORT:8082}
+  port: ${SERVER_PORT:8083}
 
 spring:
   devtools:
@@ -10,7 +10,7 @@ spring:
   jpa:
     hibernate.ddl-auto: none
   datasource:
-    url: jdbc:h2:mem:report
+    url: jdbc:h2:mem:retries
     driverClassName: org.h2.Driver
     database-platform: org.hibernate.dialect.H2Dialect
     username: sa
