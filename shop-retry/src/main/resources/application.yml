@@ -1,0 +1,17 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  devtools:
+    restart:
+      enabled: true
+    livereload:
+      enabled: true
+  jpa:
+    hibernate.ddl-auto: none
+  datasource:
+    url: jdbc:h2:mem:report
+    driverClassName: org.h2.Driver
+    database-platform: org.hibernate.dialect.H2Dialect
+    username: sa
+    password:
