@@ -8,6 +8,7 @@ e o status da compra, se foi válida ou inválida.
 ```
 create table shop (
     id bigserial primary key auto_increment,
+    buyer_identifier varchar(100) not null,
     identifier varchar not null,
     status varchar not null,
     date_shop date
@@ -29,6 +30,7 @@ create table shop_item (
 POST: /shop
 
 {
+    "buyerIdentifier": "b-1",
     "items": [
         {
             "productIdentifier": "123456789",
@@ -43,6 +45,7 @@ RESPONSE:
     "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
     "dateShop": "2022-03-07",
     "status": "PENDING",
+    "buyerIdentifier": "b-1",
     "items": [
         {
             "productIdentifier": "123456789",
@@ -63,6 +66,7 @@ GET: /shop
         "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
         "dateShop": "2022-03-07",
         "status": "SUCCESS",
+        "buyerIdentifier": "b-1",
         "items": [
             {
                 "productIdentifier": "123456789",

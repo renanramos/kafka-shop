@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class ShopController {
 
 	private final ShopRepository shopRepository;
-	private final KafkaClient kafkaClient;
+	private final KafkaClient<ShopDTO> kafkaClient;
 	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
 
 	@GetMapping
@@ -43,13 +43,9 @@ public class ShopController {
 
 		final Shop shop = ShopMapper.INSTANCE.mapShopFrom(shopDTO);
 
-		for (final ShopItem shopItem : shop.getItems()) {
-			shopItem.setShop(shop);
-		}
-
 		final Shop newShop = shopRepository.save(shop);
 
-		kafkaClient.sendMessage(SHOP_TOPIC_NAME, shopDTO);
+		kafkaClient.sendMessage(SHOP_TOPIC_NAME, shopDTO.getBuyerIdentifier(), shopDTO);
 
 		return ShopDTOMapper.INSTANCE.mapShopDTOFrom(newShop);
 	}

@@ -24,6 +24,9 @@ public class Shop {
 	@Column(name = "date_shop")
 	private LocalDate dateShop;
 
+	@Column(name = "buyer_identifier")
+	private String buyerIdentifier;
+
 	@OneToMany(fetch = FetchType.EAGER,
 					   cascade = CascadeType.ALL,
 						 mappedBy = "shop")

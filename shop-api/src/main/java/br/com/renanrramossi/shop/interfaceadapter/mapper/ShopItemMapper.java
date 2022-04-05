@@ -7,11 +7,25 @@ import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface ShopItemMapper {
 
 	ShopItemMapper INSTANCE = Mappers.getMapper(ShopItemMapper.class);
 
-	@Named("mapShopItemDTOFrom")
-	ShopItemDTO mapShopItemDTOFrom(final ShopItem shopItem);
+
+	@Named("mapShopItemsFrom")
+	default List<ShopItem> mapShopItemsFrom(final List<ShopItemDTO> itemDtoList) {
+		if (itemDtoList == null) {
+			return Collections.emptyList();
+		}
+
+		return itemDtoList.stream().map(ShopItemMapper.INSTANCE::mapShopItemDtoFrom).collect(Collectors.toList());
+	}
+
+	@Named("mapShopItemDtoFrom")
+	ShopItem mapShopItemDtoFrom(final ShopItemDTO shopItemDTO);
 }
