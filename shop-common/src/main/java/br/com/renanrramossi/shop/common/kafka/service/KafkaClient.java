@@ -1,5 +1,6 @@
 package br.com.renanrramossi.shop.common.kafka.service;
 
-public abstract class KafkaClient<T> {
-	public abstract void sendMessage(String topicName, T message);
+public interface KafkaClient<T> {
+	void sendMessage(String topicName, String key, T message);
+	void sendMessage(String topicName, T message);
 }

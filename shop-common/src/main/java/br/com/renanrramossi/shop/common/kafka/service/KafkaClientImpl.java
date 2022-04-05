@@ -6,12 +6,17 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class KafkaClientImpl<T> extends KafkaClient<T>{
+public class KafkaClientImpl<T> implements KafkaClient<T>{
 
 	private final KafkaTemplate<String, T> kafkaTemplate;
 
 	@Override
-	public void sendMessage(String topicName, T message) {
+	public void sendMessage(final String topicName, final String key, final T message) {
+		kafkaTemplate.send(topicName, key, message);
+	}
+
+	@Override
+	public void sendMessage(final String topicName, final T message) {
 		kafkaTemplate.send(topicName, message);
 	}
 }
