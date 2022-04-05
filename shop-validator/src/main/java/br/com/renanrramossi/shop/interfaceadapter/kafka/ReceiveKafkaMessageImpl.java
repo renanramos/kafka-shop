@@ -10,29 +10,35 @@ import br.com.renanrramossi.shop.interfaceadapter.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Slf4j
-@Service
+@Component
 @RequiredArgsConstructor
-public class ReceiveKafkaMessageImpl extends ReceiveKafkaEvent<ShopDTO> {
+public class ReceiveKafkaMessageImpl implements ReceiveKafkaEvent<ShopDTO> {
 
 	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
 	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
 
 	private final ProductRepository productRepository;
-	private final KafkaClient kafkaClient;
+	private final KafkaClient<ShopDTO> kafkaClient;
 
+	@Override
 	@KafkaListener(topics =  SHOP_TOPIC_NAME, groupId = "group")
-	public void listenToEvents(final ShopDTO shopDTO) {
-
+	public void listenToEvents(ShopDTO shopDTO,
+														 @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) final String key,
+														 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final String partitionId,
+														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP) final String timestamp) {
 		try {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());
 
 			shopDTO.setStatus(validateShopItems(shopDTO.getItems(), shopDTO.getIdentifier()));
-			kafkaClient.sendMessage(SHOP_TOPIC_EVENT_NAME, shopDTO);
+			kafkaClient.sendMessage(SHOP_TOPIC_EVENT_NAME, shopDTO.getBuyerIdentifier(), shopDTO);
 
 		} catch (Exception ex) {
 			log.error("Exception: " + ex.getLocalizedMessage());
