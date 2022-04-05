@@ -12,9 +12,11 @@ Todos os módulos foram desenvolvidos utilizando as seguintes tecnologias:
 * Spring Kafka
 
 <b>shop-api:</b> módulo de API que disponibiliza dois end-points.</br>
-<b>shop-validator:</b> módulo que executa a validação do pedidobaseando-se na existencia do produto recebido e na quantidade de itens em estoque.</br>
-<b>shop-api:</b> módulo com modelos compartilhados.</br>
+<b>shop-common:</b> módulo com implementações e configurações globais do Kafka.<br>
+<b>shop-model:</b> módulo com modelos compartilhados.</br>
 <b>shop-report:</b> módulo com endpoint único com total de pedidos aceitos <code>SUCCESS</code> e não aceitos <code>ERROR</code>.
+<b>shop-retry:</b> módulo para simulação de retentativas em caso de falha. </br>
+<b>shop-validator:</b> módulo que executa a validação do pedidobaseando-se na existencia do produto recebido e na quantidade de itens em estoque.</br>
 
 ### Shop-API
 
