@@ -30,10 +30,10 @@ public class ReceiveKafkaMessageImpl implements ReceiveKafkaEvent<ShopDTO> {
 
 	@Override
 	@KafkaListener(topics =  SHOP_TOPIC_NAME, groupId = "group")
-	public void listenToEvents(ShopDTO shopDTO,
+	public void listenToEvents(final ShopDTO shopDTO,
 														 @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) final String key,
 														 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final String partitionId,
-														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP) final String timestamp) {
+														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP) final String timestamp) throws Exception {
 		try {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());
 

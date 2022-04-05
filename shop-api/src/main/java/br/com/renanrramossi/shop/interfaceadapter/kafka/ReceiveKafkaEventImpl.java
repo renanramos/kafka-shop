@@ -10,7 +10,6 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Slf4j
 @Component
@@ -25,7 +24,7 @@ public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent<ShopDTO> {
 	public void listenToEvents(final ShopDTO shopDTO,
 														 @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY)	final String key,
 														 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final String partitionId,
-														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP)	final String timestamp) {
+														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP)	final String timestamp) throws Exception{
 		try{
 			log.info("Status da compra recebida no tópico: {}.", shopDTO.getIdentifier());
 

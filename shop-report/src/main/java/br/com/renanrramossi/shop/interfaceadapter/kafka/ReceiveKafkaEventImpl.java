@@ -27,7 +27,7 @@ public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent<ShopDTO> {
 	public void listenToEvents(final ShopDTO shopDTO,
 														 @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) final String key,
 														 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final String partitionId,
-														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP) final String timestamp) {
+														 @Header(KafkaHeaders.RECEIVED_TIMESTAMP) final String timestamp) throws Exception{
 
 		try {
 			log.info("Compra recebida no tópico: {}", shopDTO.getIdentifier());
