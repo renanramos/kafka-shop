@@ -27,6 +27,7 @@
 		<module>shop-report</module>
 		<module>shop-model</module>
         <module>shop-common</module>
+        <module>shop-retry</module>
     </modules>
 
 	<dependencies>
