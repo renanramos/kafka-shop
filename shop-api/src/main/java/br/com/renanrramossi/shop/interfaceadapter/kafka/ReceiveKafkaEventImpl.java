@@ -11,14 +11,14 @@ import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
+import static br.com.renanrramossi.shop.common.constants.TopicsNames.SHOP_TOPIC_EVENT_NAME;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ReceiveKafkaEventImpl implements ReceiveKafkaEvent<ShopDTO> {
 
 	private final ShopRepository shopRepository;
-
-	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
 
 	@KafkaListener(topics = SHOP_TOPIC_EVENT_NAME, groupId = "group")
 	public void listenToEvents(final ShopDTO shopDTO,

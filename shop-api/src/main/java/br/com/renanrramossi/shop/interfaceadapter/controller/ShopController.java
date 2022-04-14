@@ -5,7 +5,6 @@ import br.com.renanrramossi.shop.domain.entities.StatusEnum;
 import br.com.renanrramossi.shop.interfaceadapter.repository.ShopRepository;
 import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.entities.Shop;
-import br.com.renanrramossi.shop.domain.entities.ShopItem;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopDTOMapper;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopMapper;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +15,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static br.com.renanrramossi.shop.common.constants.TopicsNames.SHOP_TOPIC;
+
 @RestController
 @RequestMapping("/shop")
 @RequiredArgsConstructor
@@ -23,7 +24,6 @@ public class ShopController {
 
 	private final ShopRepository shopRepository;
 	private final KafkaClient<ShopDTO> kafkaClient;
-	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
 
 	@GetMapping
 	public List<ShopDTO> getShop() {
@@ -45,7 +45,7 @@ public class ShopController {
 
 		final Shop newShop = shopRepository.save(shop);
 
-		kafkaClient.sendMessage(SHOP_TOPIC_NAME, shopDTO.getBuyerIdentifier(), shopDTO);
+		kafkaClient.sendMessage(SHOP_TOPIC, shopDTO.getBuyerIdentifier(), shopDTO);
 
 		return ShopDTOMapper.INSTANCE.mapShopDTOFrom(newShop);
 	}

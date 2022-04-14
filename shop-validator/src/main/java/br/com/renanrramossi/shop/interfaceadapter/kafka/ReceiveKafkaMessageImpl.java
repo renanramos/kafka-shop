@@ -13,23 +13,22 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.kafka.support.KafkaHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
+
+import static br.com.renanrramossi.shop.common.constants.TopicsNames.SHOP_TOPIC;
+import static br.com.renanrramossi.shop.common.constants.TopicsNames.SHOP_TOPIC_EVENT_NAME;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class ReceiveKafkaMessageImpl implements ReceiveKafkaEvent<ShopDTO> {
 
-	private static final String SHOP_TOPIC_NAME = "SHOP_TOPIC";
-	private static final String SHOP_TOPIC_EVENT_NAME = "SHOP_TOPIC_EVENT";
-
 	private final ProductRepository productRepository;
 	private final KafkaClient<ShopDTO> kafkaClient;
 
 	@Override
-	@KafkaListener(topics =  SHOP_TOPIC_NAME, groupId = "group")
+	@KafkaListener(topics = SHOP_TOPIC, groupId = "group")
 	public void listenToEvents(final ShopDTO shopDTO,
 														 @Header(KafkaHeaders.RECEIVED_MESSAGE_KEY) final String key,
 														 @Header(KafkaHeaders.RECEIVED_PARTITION_ID) final String partitionId,

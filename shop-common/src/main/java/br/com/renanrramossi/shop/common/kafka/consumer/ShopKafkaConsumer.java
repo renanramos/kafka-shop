@@ -16,8 +16,6 @@ import java.util.Map;
 @Configuration
 public class ShopKafkaConsumer<T> {
 
-	public static final String BASE_PACKAGE = "br.com.renanrramossi.shop";
-
 	@Value("${kafka.bootstrapAddress:localhost:9092}")
 	private String bootstrapAddress;
 
