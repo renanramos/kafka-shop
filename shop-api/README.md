@@ -1,36 +1,36 @@
 ## Shop-API
 
-API composta de dois endpoints para realizar a compra de produtos `POST` e também para realizar a consulta de compras efetuadas `GET`
-e o status da compra, se foi válida ou inválida.
+The shop API consists of two endpoints for product purchase (using `POST`) and for querying completed purchases (using `GET`), including the purchase status (valid or invalid).
 
-* O arquivo `schema.sql` é responsável por criar as tabelas no banco de dados `H2`:
+### Database Schema
 
-```
-create table shop (
-    id bigserial primary key auto_increment,
-    buyer_identifier varchar(100) not null,
-    identifier varchar not null,
-    status varchar not null,
-    date_shop date
+The database schema is defined in the `schema.sql` file, responsible for creating tables in the H2 database:
+
+```sql
+CREATE TABLE shop (
+    id BIGSERIAL PRIMARY KEY AUTO_INCREMENT,
+    identifier VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    date_shop DATE
 );
 
-create table shop_item (
-    id bigserial primary key auto_increment,
-    product_identifier varchar(100) not null,
-    amount int not null,
-    price float not null,
-    shop_id bigint REFERENCES shop(id)
+CREATE TABLE shop_item (
+    id BIGSERIAL PRIMARY KEY AUTO_INCREMENT,
+    product_identifier VARCHAR(100) NOT NULL,
+    amount INT NOT NULL,
+    price FLOAT NOT NULL,
+    shop_id BIGINT REFERENCES shop(id)
 );
 ```
 
+### Making a new Purchase (POST)
 
-* Efetuar o <code>POST</code> de uma nova compra:
-
+To initiate a new purchase, use a `POST` request:
 ```
 POST: /shop
 
 {
-    "buyerIdentifier": "b-1",
+    "buyerIdentifier": "1234",   <-- any code here
     "items": [
         {
             "productIdentifier": "123456789",
@@ -41,11 +41,11 @@ POST: /shop
 }
 
 RESPONSE:
+
 {
     "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
     "dateShop": "2022-03-07",
     "status": "PENDING",
-    "buyerIdentifier": "b-1",
     "items": [
         {
             "productIdentifier": "123456789",
@@ -55,8 +55,9 @@ RESPONSE:
     ]
 }
 ```
+### Querying purchase status (GET)
 
-* Consultar o status da compra realizada:
+To check the status of a completed purchase, use a `GET` request:
 
 ```
 GET: /shop
@@ -66,7 +67,7 @@ GET: /shop
         "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
         "dateShop": "2022-03-07",
         "status": "SUCCESS",
-        "buyerIdentifier": "b-1",
+        "buyerIdentifier": "1234",
         "items": [
             {
                 "productIdentifier": "123456789",

@@ -1,54 +1,67 @@
 # Shop
 
-Simulação de funcionamento de uma loja com módulos separados e que se comunicam via Kafka.
+This project simulates the operation of a shop with separate modules that communicate through Kafka.
 
-## Módulos
+## Modules
 
-Todos os módulos foram desenvolvidos utilizando as seguintes tecnologias:
+All modules in this project have been developed using the following technologies:
 
-* Spring Boot
-* H2 database
-* Spring Data JPA
-* Spring Kafka
+- Spring Boot
+- H2 database
+- Spring Data JPA
+- Spring Kafka
 
-<b>shop-api:</b> módulo de API que disponibiliza dois end-points.</br>
-<b>shop-common:</b> módulo com implementações e configurações globais do Kafka.<br>
-<b>shop-model:</b> módulo com modelos compartilhados.</br>
-<b>shop-report:</b> módulo com endpoint único com total de pedidos aceitos <code>SUCCESS</code> e não aceitos <code>ERROR</code>.
-<b>shop-retry:</b> módulo para simulação de retentativas em caso de falha. </br>
-<b>shop-validator:</b> módulo que executa a validação do pedidobaseando-se na existencia do produto recebido e na quantidade de itens em estoque.</br>
+### **shop-api:**
+This module provides two endpoints for the shop API.
 
-### Shop-API
+### **shop-common:**
+It contains global Kafka implementations and configurations.
 
-API composta de dois endpoints para realizar a compra de produtos `POST` e também para realizar a consulta de compras efetuadas `GET`
-e o status da compra, se foi válida ou inválida.
+### **shop-model:**
+This module comprises shared models.
 
-* O arquivo `schema.sql` é responsável por criar as tabelas no banco de dados `H2`:
+### **shop-report:**
+The module includes a single endpoint for tracking the total count of accepted orders (code: `SUCCESS`) and rejected orders (code: `ERROR`).
 
-```
-create table shop (
-    id bigserial primary key auto_increment,
-    identifier varchar not null,
-    status varchar not null,
-    date_shop date
+### **shop-retry:**
+This module is dedicated to simulating retries in case of failure.
+
+### **shop-validator:**
+It performs order validation based on product existence and item quantity in stock.
+
+## Shop-API
+
+The shop API consists of two endpoints for product purchase (using `POST`) and for querying completed purchases (using `GET`), including the purchase status (valid or invalid).
+
+### Database Schema
+
+The database schema is defined in the `schema.sql` file, responsible for creating tables in the H2 database:
+
+```sql
+CREATE TABLE shop (
+    id BIGSERIAL PRIMARY KEY AUTO_INCREMENT,
+    identifier VARCHAR NOT NULL,
+    status VARCHAR NOT NULL,
+    date_shop DATE
 );
 
-create table shop_item (
-    id bigserial primary key auto_increment,
-    product_identifier varchar(100) not null,
-    amount int not null,
-    price float not null,
-    shop_id bigint REFERENCES shop(id)
+CREATE TABLE shop_item (
+    id BIGSERIAL PRIMARY KEY AUTO_INCREMENT,
+    product_identifier VARCHAR(100) NOT NULL,
+    amount INT NOT NULL,
+    price FLOAT NOT NULL,
+    shop_id BIGINT REFERENCES shop(id)
 );
 ```
 
+### Making a new Purchase (POST)
 
-* Efetuar o <code>POST</code> de uma nova compra:
-
+To initiate a new purchase, use a `POST` request:
 ```
 POST: /shop
 
 {
+    "buyerIdentifier": "1234",   <-- any code here
     "items": [
         {
             "productIdentifier": "123456789",
@@ -59,6 +72,7 @@ POST: /shop
 }
 
 RESPONSE:
+
 {
     "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
     "dateShop": "2022-03-07",
@@ -72,8 +86,9 @@ RESPONSE:
     ]
 }
 ```
+### Querying purchase status (GET)
 
-* Consultar o status da compra realizada:
+To check the status of a completed purchase, use a `GET` request:
 
 ```
 GET: /shop
@@ -83,6 +98,7 @@ GET: /shop
         "identifier": "063dea07-1e5c-4999-bbfb-3dffc0ba1602",
         "dateShop": "2022-03-07",
         "status": "SUCCESS",
+        "buyerIdentifier": "1234",
         "items": [
             {
                 "productIdentifier": "123456789",
@@ -94,37 +110,37 @@ GET: /shop
 ]
 ```
 
-
 ### Shop-Validator
 
-Ao efetuar o envio de uma nova compra através do <code>shop-api</code>, o Kafka envia uma mensagem ao <code>shop-validator</code>
-onde realizará a validação do código do produto enviado. 
+When a new purchase is sent through `shop-api`, Kafka sends a message to `shop-validator`, which validates the product
+code sent.
 
-No projeto existem dois arquivos <code>schema.sql</code> e <code>data.sql</code> nos quais realizarão a criação da tabela de 
-produtos válidos e a inserção de registros iniciais. Inicialmente, somente dois códigos de produtos são válidos.
+### Database Setup
+In this project, two SQL files, `schema.sql` and `data.sql`, create a table of valid products and insert initial records.
+Initially, only two product codes are considered valid.
 
-Script em `schema.sql`:
+`schema.sql` script:
+
 ```
-create schema if not exists product;
+CREATE SCHEMA IF NOT EXISTS product;
 
-create table product (
-    id bigserial primary key auto_increment,
-    identifier varchar(100) not null,
-    amount int not null
+CREATE TABLE product (
+id BIGSERIAL PRIMARY KEY AUTO_INCREMENT,
+identifier VARCHAR(100) NOT NULL,
+amount INT NOT NULL
 );
 ```
 
-Script em `data.sql`:
+`data.sql` script:
 
-```
-insert into product values(1, '123456789', 100);
-insert into product values(2, '987654321', 200);
+``` 
+INSERT INTO product VALUES(1, '123456789', 100);
+INSERT INTO product VALUES(2, '987654321', 200);
 ```
 
 ### Shop-Report
-
-O módulo `shop-report` expõe um endpoint `/shop_report` que disponibiliza a quantidade de compras aceitas ou recusadas no processo
-de valição de compras.
+The shop-report module exposes an endpoint, `/shop_report`, which provides information on the number of accepted
+(code: `SUCCESS`) and rejected (code: `ERROR`) purchases in the validation process.
 
 ```
 GET: /shop_report
@@ -139,15 +155,23 @@ GET: /shop_report
         "amount": 0
     }
 ]
-
 ```
 
 ### Shop-Model
-
-Módulo contento as classes modelos utilizadas entre outros módulos. Uma forma de centralizar o código evitando a repetição
-de código nos diferentes módulos.
-
+This module contains model classes shared among various other modules, reducing code repetition.
 
 ### Shop-Common
+The shop-common module is designed to contain all Kafka services used by other modules, providing a centralized approach
+to Kafka-related functionalities.
 
-Módulo criado com o objetivo de conte todos os serviços utilizados do Kafka pelos outros módulos.
+### Setting up the application
+
+The entire Kafka Shop project relies on Kafka application. To get the Kafka application up and running, you'll need to 
+execute the `docker-compose` command. Follow these steps:
+
+1- Make sure you're in the root path.
+2- Start the Kafka server by running the following command to initialize the Kafka application
+
+```
+docker-compose -f misc/docker/docker-compose up
+```
