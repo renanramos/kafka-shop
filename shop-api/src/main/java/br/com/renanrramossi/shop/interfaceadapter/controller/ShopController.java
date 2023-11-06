@@ -7,6 +7,7 @@ import br.com.renanrramossi.shop.domain.dto.ShopDTO;
 import br.com.renanrramossi.shop.domain.entities.Shop;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopDTOMapper;
 import br.com.renanrramossi.shop.interfaceadapter.mapper.ShopMapper;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +36,7 @@ public class ShopController {
 	}
 
 	@PostMapping
-	public ShopDTO saveShop(@RequestBody final ShopDTO shopDTO) {
+	public ShopDTO saveShop(@RequestBody @Valid final ShopDTO shopDTO) {
 
 		shopDTO.setIdentifier(UUID.randomUUID().toString());
 		shopDTO.setDateShop(LocalDate.now());
