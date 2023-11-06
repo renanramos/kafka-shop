@@ -21,12 +21,12 @@
 			<version>${org.mapstruct.version}</version>
 		</dependency>
 
-        <dependency>
-            <groupId>br.com.renanrramossi</groupId>
-            <artifactId>shop-model</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+		<dependency>
+			<groupId>br.com.renanrramossi</groupId>
+			<artifactId>shop-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 			<classifier>model</classifier>
-        </dependency>
+		</dependency>
 
 		<dependency>
 			<groupId>br.com.renanrramossi</groupId>
